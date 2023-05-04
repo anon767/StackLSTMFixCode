@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 from models import NVDDataset, StackLSTM
 from utilities import funcs
+import logging
 
 HIDDEN_SIZE_CONTROLLER = 6
 EMBED_DIM = 5
@@ -10,10 +11,10 @@ HIDDEN_SIZE_STACK = 4
 LR = 0.001
 BATCH_SIZE = 2
 EPOCHS = 5
-
+logging.basicConfig(filename='info.log', filemode='w', level=logging.INFO)
 
 train_dataset = NVDDataset(data_path="dataset_preprocessed.pkl", vocab_path="vocab.pkl")
-test_dataset = NVDDataset(data_path="dataset_preprocessed.pkl", vocab_path="vocab.pkl")
+test_dataset = NVDDataset(data_path="dataset_preprocessed.pkl", vocab_path="vocab.pkl", train=False)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, collate_fn=funcs.pad_collate)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, collate_fn=funcs.pad_collate)
 
@@ -29,7 +30,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 best_vloss = 1_000_000_000_000
 
 for epoch in range(EPOCHS):
-    print('EPOCH {}:'.format(epoch + 1))
+    logging.info(f'EPOCH {epoch + 1}:')
     model.train(True)
     epoch_loss = funcs.train_one_epoch(training_loader=train_loader,
                                        optimizer=optimizer,
@@ -41,8 +42,8 @@ for epoch in range(EPOCHS):
         voutputs = model(vinputs)
         vloss = loss_fn(voutputs, vlabels)
         vloss += vloss
-    print('LOSS train {} valid {}'.format(epoch_loss, vloss))
+    logging.info(f'LOSS train {epoch_loss} valid {vloss}')
     if vloss < best_vloss:
         best_vloss = vloss
-        model_path = 'model_{}'.format(epoch)
+        model_path = f'model_{epoch}'
         torch.save(model.state_dict(), model_path)
