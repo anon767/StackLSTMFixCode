@@ -32,7 +32,6 @@ class StackLSTM(nn.Module):
         self.output_linear = nn.Linear(in_features=hidden_size_controller, out_features=self.embedding_size)
         self.softmax = nn.Softmax()
 
-        self.stack = Stack(batch_size=batch_size, embedding_size=hidden_size_stack)
         # self.input_buffer = buffers.InputBuffer(batch_size=batch_size, embedding_size=hidden_size_stack)
         # self.output_buffer = buffers.OutputBuffer(batch_size=batch_size, embedding_size=hidden_size_stack)
 
@@ -46,6 +45,7 @@ class StackLSTM(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
      def forward(self, x):
+        self.stack = Stack(batch_size=self.batch_size, embedding_size=self.hidden_size_stack)
         embedded_x = self.embedding(x)
         hx, cx, rx = self.init_hidden()
         outputs = [] 
