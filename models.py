@@ -50,7 +50,6 @@ class StackLSTM(nn.Module):
         hx, cx, rx = self.init_hidden()
         outputs = [] 
         for i, curr_x in enumerate(embedded_x):
-            print(i)
             cat_x_rx = torch.cat((curr_x, rx), axis=-1)
             hx, cx = self.controller(cat_x_rx, (hx, cx))
 
