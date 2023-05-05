@@ -41,7 +41,6 @@ for epoch in range(EPOCHS):
         vinputs, vlabels = vdata
         voutputs = model(vinputs)
         vloss = loss_fn(voutputs, vlabels)
-        vloss += vloss
     logging.info(f'LOSS train {epoch_loss} valid {vloss}')
     if vloss < best_vloss:
         best_vloss = vloss
