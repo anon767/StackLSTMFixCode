@@ -38,7 +38,7 @@ for epoch in range(EPOCHS):
                                        loss_fn=loss_fn)
     running_vloss = 0.0
     for i, vdata in enumerate(test_loader):
-        vinputs, vlabels = vdata
+        vinputs, vlabels, _ = vdata
         voutputs = model(vinputs)
         vloss = loss_fn(voutputs, vlabels)
     logging.info(f'LOSS train {epoch_loss} valid {vloss}')
