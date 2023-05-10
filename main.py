@@ -40,10 +40,10 @@ for epoch in range(EPOCHS):
     model.train(False)
 
     for i, vdata in enumerate(test_loader):
-        vinputs, vlabels, _ = vdata
+        vinputs, vlabels, _, _ = vdata
         vlabels = vlabels.reshape(1,-1)
         voutputs = model(vinputs)
-        vloss = loss_fn(voutputs, vlabels)
+        vloss = loss_fn(voutputs, vlabels).detach()
     logging.info(f'LOSS train {epoch_loss} valid {vloss}')
     if vloss < best_vloss:
         best_vloss = vloss
