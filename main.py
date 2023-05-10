@@ -37,6 +37,8 @@ for epoch in range(EPOCHS):
                                        model=model,
                                        loss_fn=loss_fn)
     running_vloss = 0.0
+    model.train(False)
+
     for i, vdata in enumerate(test_loader):
         vinputs, vlabels, _ = vdata
         vlabels = vlabels.reshape(1,-1)
